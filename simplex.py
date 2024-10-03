@@ -49,3 +49,35 @@ def print_tableau(tableau):
     for row in tableau:
         print(row)
     print()
+
+def find_pivot_column(tableau, epsilon):
+    # Find the most negative value in the objective row (excluding the last column)
+    objective_row = tableau[-1]
+    min_value = min(objective_row[:-1])
+    if min_value >= -epsilon:
+        return -1  # If all values are non-negative or close to zero, the solution is optimal
+    return objective_row.index(min_value)
+
+def find_pivot_row(tableau, pivot_col, epsilon):
+    num_rows = len(tableau) - 1
+    min_ratio = float('inf')
+    pivot_row = -1
+    for i in range(num_rows):
+        if tableau[i][pivot_col] > epsilon:  # Only consider positive entries in the pivot column
+            ratio = tableau[i][-1] / tableau[i][pivot_col]
+            if ratio < min_ratio:
+                min_ratio = ratio
+                pivot_row = i
+    return pivot_row
+
+def pivot_operation(tableau, pivot_row, pivot_col):
+    pivot_value = tableau[pivot_row][pivot_col]
+    tableau[pivot_row] = [x / pivot_value for x in tableau[pivot_row]]
+
+    num_rows = len(tableau)
+    num_cols = len(tableau[0])
+    
+    for i in range(num_rows):
+        if i != pivot_row:
+            row_factor = tableau[i][pivot_col]
+            tableau[i] = [tableau[i][j] - row_factor * tableau[pivot_row][j] for j in range(num_cols)]
