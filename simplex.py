@@ -120,7 +120,10 @@ def simplex_solver(C, A, b, eps=1e-6):
 
     def round_value(value, eps):
         return round_to_eps(value, eps)
-
+    
+    if any(bi < 0 for bi in b):
+        print("The method is not applicable!")
+        return
     print_problem(C, A, b)
 
     tableau = construct_initial_tableau(C, A, b)
@@ -130,13 +133,11 @@ def simplex_solver(C, A, b, eps=1e-6):
     while True:
         pivot_col = find_pivot_column(tableau)
         if pivot_col == -1:
-            solver_state = 'solved'
             break
         pivot_row = find_pivot_row(tableau, pivot_col)
         if pivot_row == -1:
-            solver_state = 'unbounded'
-            print("The problem is unbounded.")
-            return {'solver_state': solver_state}
+            print("The method is not applicable!")
+            return
         pivot_operation(tableau, pivot_row, pivot_col)
 
     solution = extract_solution(tableau, num_variables, total_variables)
@@ -144,37 +145,30 @@ def simplex_solver(C, A, b, eps=1e-6):
     optimal_value = tableau[-1][-1]
     optimal_value = round_value(optimal_value, eps)
 
-    print("Optimal solution x*:", solution)
-    print("Optimal value z:", optimal_value)
+    print("x*:", solution)
+    print("z:", optimal_value)
 
-    return {
-        'solver_state': solver_state,
-        'x*': solution,
-        'z': optimal_value
-    }
+    return
 
 def main():
     # Objective function coefficients
-    C = [2, 3, 0, -1, 0, 0]
+    C = [3, 2, 4]
 
     # Constraints coefficients
     A = [
-        [2, -1, 0, -2, 1, 0],
-        [3, 2, 1, -3, 0, 0],
-        [-1, 3, 0, 4, 0, 1],
+        [-1, 2, 1],
+        [4, 1, 2],
+        [-2, 0, 1],
     ]
 
     # Right-hand side values
-    b = [16, 18, 24]
+    b = [-1, 8, 3]
 
     # Approximation accuracy
-    eps = 1e-2
+    eps = 1e-4
 
-    result = simplex_solver(C, A, b, eps)
+    simplex_solver(C, A, b, eps)
 
-    print("\nResult:")
-    for key, value in result.items():
-        print(f"{key}: {value}")
 
 if __name__ == '__main__':
     main()
