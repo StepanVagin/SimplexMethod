@@ -1,6 +1,8 @@
 import math
+from typing import Any
 
-def simplex_solver(C, A, b, eps=1e-6):
+
+def simplex_solver(C: list[Any], A: list[list[Any]], b: list[Any], eps=1e-6) -> dict[str, Any]:
     """
     Solves the Linear Programming Problem using the Simplex method.
 
@@ -16,7 +18,7 @@ def simplex_solver(C, A, b, eps=1e-6):
     - z: Maximum value of the objective function (if solved)
     """
 
-    def print_problem(C, A, b):
+    def print_problem(C: list[Any], A: list[list[Any]], b: list[Any]):
         n = len(C)
         obj_function = "max z = "
         obj_terms = []
@@ -104,7 +106,6 @@ def simplex_solver(C, A, b, eps=1e-6):
                 solution[j] = 0
         return solution
 
-
     def round_to_eps(x, eps):
         """
         Rounds the number x to the nearest multiple based on eps.
@@ -144,14 +145,12 @@ def simplex_solver(C, A, b, eps=1e-6):
     optimal_value = tableau[-1][-1]
     optimal_value = round_value(optimal_value, eps)
 
-    print("Optimal solution x*:", solution)
-    print("Optimal value z:", optimal_value)
-
     return {
         'solver_state': solver_state,
         'x*': solution,
         'z': optimal_value
     }
+
 
 def main():
     # Objective function coefficients
@@ -175,6 +174,7 @@ def main():
     print("\nResult:")
     for key, value in result.items():
         print(f"{key}: {value}")
+
 
 if __name__ == '__main__':
     main()
