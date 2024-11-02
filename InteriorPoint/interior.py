@@ -55,7 +55,7 @@ def interior_point_algorithm(A, b, c, x_initial, alpha,
             raise Exception(f"Division by zero encountered in iteration {iteration}.")
 
         # Compute y = 1 + (alpha / nu) * cp
-        y = 1 + (alpha / nu) * cp
+        y = np.add ( np.ones( n , float), ( alpha /nu ) * cp)
 
         # Compute yy = D * y
         yy = x * y
@@ -118,25 +118,26 @@ def main():
         },
         {
             "description": "Test Case 4",
-            "c": np.array([1, 2, 0, 0]),
+            "c": np.array([2, 1, 4, 3]),
             "A": np.array([
-                [1, -1, 1, 0],
-                [0, 1, 0, 1]
+                [1, 2, 1, 0],
+                [2, 1, 0, 1],
+                [0, 1, 2, 1]
             ]),
-            "b": np.array([3, 2]),
-            "x_initial": np.array([4, 2, 0, 0]),
-            "epsilon_simplex": 1e-5,
-            "convergence_threshold": 1e-5
+            "b": np.array([4, 6, 5]),
+            "x_initial": np.array([0, 0, 0, 0]),
+            "epsilon_simplex": 1e-6,
+            "convergence_threshold": 1e-6
         },
         {
             "description": "Test Case 5",
-            "c": np.array([1, 2, 0, 0]),
+            "c": np.array([1, 1, 0, 0]),
             "A": np.array([
-                [1, 1, 1, 0],
-                [1, -1, 0, 1]
+                [2, 4, 1, 0],
+                [1, 3, 0, -1]
             ]),
-            "b": np.array([5, 3]),
-            "x_initial": np.array([1, 1, 3, 1]),
+            "b": np.array([16, 9]),
+            "x_initial": np.array([0.5, 3.5, 1, 2]),
             "epsilon_simplex": 1e-5,
             "convergence_threshold": 1e-5
         }
